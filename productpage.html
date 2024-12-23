@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Product</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Add Product</h2>
+        <form id="addProductForm" class="row g-3">
+            <div class="col-md-6">
+                <label for="name" class="form-label">Product Name</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Enter product name" required>
+            </div>
+            <div class="col-md-6">
+                <label for="price" class="form-label">Price</label>
+                <input type="text" id="price" name="price" class="form-control" placeholder="Enter price" required>
+            </div>
+            <div class="col-md-6">
+                <label for="img" class="form-label">Image URL</label>
+                <input type="text" id="img" name="img" class="form-control" placeholder="Enter image URL" required>
+            </div>
+            <div class="col-md-6">
+                <label for="category" class="form-label">Category</label>
+                <input type="text" id="category" name="category" class="form-control" placeholder="Enter category" required>
+            </div>
+            <div class="col-md-6">
+                <label for="rating" class="form-label">Rating (1-5)</label>
+                <input type="number" id="rating" name="rating" class="form-control" placeholder="Enter rating" min="1" max="5" required>
+            </div>
+            <div class="col-md-6">
+                <label for="inStockValue" class="form-label">Stock Value</label>
+                <input type="number" id="inStockValue" name="inStockValue" class="form-control" placeholder="Enter stock value" required>
+            </div>
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-primary">Add Product</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script>
+    document.getElementById('addProductForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const price = document.getElementById('price').value;
+        const img = document.getElementById('img').value;
+        const category = document.getElementById('category').value;
+        const rating = document.getElementById('rating').value;
+        const inStockValue = document.getElementById('inStockValue').value;
+
+        try {
+            const response = await fetch('http://localhost:5000/auth/add-product', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    name, 
+                    price, 
+                    img, 
+                    category, 
+                    rating, 
+                    inStockValue,
+                    soldStockValue: 0 // Initialize sold stock value
+                }),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert('Product added successfully');
+                document.getElementById('addProductForm').reset();
+            } else {
+                alert(`Error: ${result.error}`);
+            }
+        } catch (error) {
+            alert('Failed to add product');
+        }
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
